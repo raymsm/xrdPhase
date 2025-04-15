@@ -1,11 +1,11 @@
-import {ArrowRight, Check, ChevronsUpDown, Circle, Copy, Edit, ExternalLink, File, HelpCircle, Home, Loader2, Mail, MessageSquare, Moon, Plus, PlusCircle, Search, Server, Settings, Share2, Shield, Sun, Trash, User, X, Workflow} from 'lucide-react';
+import {ArrowRight, Check, ChevronsUpDown, Circle, Copy, Edit, ExternalLink, File, HelpCircle, Home, Loader2, Mail, MessageSquare, Moon, Plus, PlusCircle, Search, Server, Settings, Share2, Shield, Sun, Trash, User, X} from 'lucide-react';
+import {Crystal} from "./icons/crystal";
 
 const Icons = {
   arrowRight: ArrowRight,
   check: Check,
   chevronDown: ChevronsUpDown,
   circle: Circle,
-  workflow: Workflow,
   close: X,
   copy: Copy,
   dark: Moon,
@@ -28,6 +28,7 @@ const Icons = {
   spinner: Loader2,
   trash: Trash,
   user: User,
+  crystal: Crystal,
 };
 
 export {Icons};
