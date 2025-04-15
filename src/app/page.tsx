@@ -6,7 +6,7 @@ import {useState} from 'react';
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
 import {Input} from '@/components/ui/input';
 import {Button} from '@/components/ui/button';
-import {UploadIcon} from '@radix-ui/react-icons';
+import {UploadIcon} from 'lucide-react';
 import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from '@/components/ui/table';
 import {Alert, AlertDescription, AlertTitle} from '@/components/ui/alert';
 import {HelpCircle} from 'lucide-react';
@@ -19,6 +19,7 @@ export default function Home() {
   const [suggestions, setSuggestions] = useState<SuggestStructuresOutput | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [elementProfile, setElementProfile] = useState<string>('');
+  const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     setError(null);
@@ -29,16 +30,36 @@ export default function Home() {
       return;
     }
 
-    try {
-      const processedFile = await processFileUpload(file);
-      setFilename(processedFile.filename);
-      setFileContent(processedFile.data);
+    setFilename(file.name);
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const fileContent = e.target?.result as string;
+      setFileContent(fileContent);
+    };
+    reader.readAsText(file);
+  };
 
-      const structureSuggestions = await suggestStructures({file: processedFile});
+  const handleAnalyze = async () => {
+    if (!filename || !fileContent) {
+      setError('Please upload a file first.');
+      return;
+    }
+
+    setIsAnalyzing(true);
+    setError(null);
+    setSuggestions(null);
+
+    try {
+      const structureSuggestions = await suggestStructures({
+        file: {filename: filename, data: fileContent},
+        elementProfile: elementProfile,
+      });
       setSuggestions(structureSuggestions);
     } catch (e: any) {
       console.error('Error processing file:', e);
       setError(`Error processing file: ${e.message}`);
+    } finally {
+      setIsAnalyzing(false);
     }
   };
 
@@ -71,10 +92,13 @@ export default function Home() {
               {filename || 'Upload XRD Data'}
             </label>
             <Textarea
-              placeholder="Enter element profile (e.g., specific elements present in the sample)"
+              placeholder="Enter element profile (e.g., Cu, Fe, Ni)"
               value={elementProfile}
               onChange={(e) => setElementProfile(e.target.value)}
             />
+            <Button onClick={handleAnalyze} disabled={isAnalyzing}>
+              {isAnalyzing ? 'Analyzing...' : 'Analyze'}
+            </Button>
             {error && (
               <Alert variant="destructive">
                 <HelpCircle className="h-4 w-4"/>
