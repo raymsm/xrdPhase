@@ -20,6 +20,7 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [elementProfile, setElementProfile] = useState<string>('');
   const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
+  const [elementProfileInput, setElementProfileInput] = useState<string>('');
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     setError(null);
@@ -37,6 +38,10 @@ export default function Home() {
       setFileContent(fileContent);
     };
     reader.readAsText(file);
+  };
+
+  const handleSetElementProfile = () => {
+    setElementProfile(elementProfileInput);
   };
 
   const handleAnalyze = async () => {
@@ -81,7 +86,7 @@ export default function Home() {
     <div className="container mx-auto p-4 flex flex-col gap-4">
       <Card>
         <CardHeader>
-          <CardTitle>XRD Data Analysis</CardTitle>
+          <CardTitle>PhaseXRD by raymsm</CardTitle>
           <CardDescription>Upload your XRD data file to identify potential crystal structures.</CardDescription>
         </CardHeader>
         <CardContent>
@@ -93,9 +98,10 @@ export default function Home() {
             </label>
             <Textarea
               placeholder="Enter element profile (e.g., Cu, Fe, Ni)"
-              value={elementProfile}
-              onChange={(e) => setElementProfile(e.target.value)}
+              value={elementProfileInput}
+              onChange={(e) => setElementProfileInput(e.target.value)}
             />
+            <Button onClick={handleSetElementProfile}>OK</Button>
             <Button onClick={handleAnalyze} disabled={isAnalyzing}>
               {isAnalyzing ? 'Analyzing...' : 'Analyze'}
             </Button>
