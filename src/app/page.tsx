@@ -40,10 +40,6 @@ export default function Home() {
     reader.readAsText(file);
   };
 
-  const handleSetElementProfile = () => {
-    setElementProfile(elementProfileInput);
-  };
-
   const handleAnalyze = async () => {
     if (!filename || !fileContent) {
       setError('Please upload a file first.');
@@ -57,7 +53,7 @@ export default function Home() {
     try {
       const structureSuggestions = await suggestStructures({
         file: {filename: filename, data: fileContent},
-        elementProfile: elementProfile,
+        elementProfile: elementProfileInput,
       });
       setSuggestions(structureSuggestions);
     } catch (e: any) {
@@ -101,7 +97,6 @@ export default function Home() {
               value={elementProfileInput}
               onChange={(e) => setElementProfileInput(e.target.value)}
             />
-            <Button onClick={handleSetElementProfile}>OK</Button>
             <Button onClick={handleAnalyze} disabled={isAnalyzing}>
               {isAnalyzing ? 'Analyzing...' : 'Analyze'}
             </Button>
