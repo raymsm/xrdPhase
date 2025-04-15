@@ -6,7 +6,7 @@ import {useState} from 'react';
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
 import {Input} from '@/components/ui/input';
 import {Button} from '@/components/ui/button';
-import {FileUploadIcon} from '@radix-ui/react-icons';
+import {UploadIcon} from '@radix-ui/react-icons';
 import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from '@/components/ui/table';
 import {Alert, AlertDescription, AlertTitle} from '@/components/ui/alert';
 import {HelpCircle} from 'lucide-react';
@@ -51,7 +51,7 @@ export default function Home() {
           <div className="flex flex-col gap-4">
             <Input id="file-upload" type="file" accept=".raw,.rd,.txt,.csv,.cif" className="hidden" onChange={handleFileChange}/>
             <label htmlFor="file-upload" className="cursor-pointer rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 flex items-center gap-2">
-              <FileUploadIcon className="h-4 w-4"/>
+              <UploadIcon className="h-4 w-4"/>
               {filename || 'Upload XRD Data'}
             </label>
             {error && (
@@ -113,3 +113,4 @@ export default function Home() {
     </div>
   );
 }
+
