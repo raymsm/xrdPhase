@@ -1,4 +1,3 @@
-// src/ai/flows/suggest-structures.ts
 'use server';
 
 /**
