@@ -18,6 +18,7 @@ const SuggestStructuresInputSchema = z.object({
     filename: z.string().describe('The name of the XRD data file.'),
     data: z.string().describe('The content of the XRD data file.'),
   }).describe('The XRD data file to analyze.'),
+  elementProfile: z.string().optional().describe('The element profile of the material being analyzed.'),
 });
 export type SuggestStructuresInput = z.infer<typeof SuggestStructuresInputSchema>;
 
@@ -44,6 +45,7 @@ const suggestStructuresPrompt = ai.definePrompt({
     schema: z.object({
       filename: z.string().describe('The name of the XRD data file.'),
       data: z.string().describe('The content of the XRD data file.'),
+      elementProfile: z.string().optional().describe('The element profile of the material being analyzed.'),
     }),
   },
   output: {
@@ -65,6 +67,7 @@ Analyze the following XRD data to identify potential crystal structure matches. 
 
 Filename: {{{filename}}}
 XRD Data: {{{data}}}
+Element Profile: {{{elementProfile}}}
 
 Consider different crystal structures to incorporate in the output. Rank the crystal structures by confidence score.
 
@@ -83,6 +86,7 @@ const suggestStructuresFlow = ai.defineFlow<
   const {output} = await suggestStructuresPrompt({
     filename: input.file.filename,
     data: input.file.data,
+    elementProfile: input.elementProfile || '',
   });
   return output!;
 });

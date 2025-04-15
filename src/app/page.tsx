@@ -11,12 +11,14 @@ import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Table
 import {Alert, AlertDescription, AlertTitle} from '@/components/ui/alert';
 import {HelpCircle} from 'lucide-react';
 import {Badge} from '@/components/ui/badge';
+import {Textarea} from '@/components/ui/textarea';
 
 export default function Home() {
   const [fileContent, setFileContent] = useState<string | null>(null);
   const [filename, setFilename] = useState<string | null>(null);
   const [suggestions, setSuggestions] = useState<SuggestStructuresOutput | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [elementProfile, setElementProfile] = useState<string>('');
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     setError(null);
@@ -40,6 +42,20 @@ export default function Home() {
     }
   };
 
+  const handleExport = () => {
+    if (suggestions) {
+      const dataStr = JSON.stringify(suggestions.matches, null, 2);
+      const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+
+      const exportFileDefaultName = 'structure_suggestions.txt';
+
+      let linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUri);
+      linkElement.setAttribute('download', exportFileDefaultName);
+      linkElement.click();
+    }
+  };
+
   return (
     <div className="container mx-auto p-4 flex flex-col gap-4">
       <Card>
@@ -54,6 +70,11 @@ export default function Home() {
               <UploadIcon className="h-4 w-4"/>
               {filename || 'Upload XRD Data'}
             </label>
+            <Textarea
+              placeholder="Enter element profile (e.g., specific elements present in the sample)"
+              value={elementProfile}
+              onChange={(e) => setElementProfile(e.target.value)}
+            />
             {error && (
               <Alert variant="destructive">
                 <HelpCircle className="h-4 w-4"/>
@@ -107,10 +128,10 @@ export default function Home() {
                 <AlertDescription>No crystal structure matches were found for the provided XRD data.</AlertDescription>
               </Alert>
             )}
+            <Button onClick={handleExport}>Export Results</Button>
           </CardContent>
         </Card>
       )}
     </div>
   );
 }
-
